@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.2] - 2025-06-05
+
+### Fixed
+- Resolved issues preventing the display of return logs in the executable version.
+- Corrected inconsistent data retrieval from SQLiteCloud between `.py` and `.exe` versions.
+
+### Changed
+- Switched build system from PyInstaller to Nuitka for improved stability, compatibility, and packaging reliability.
+
+---
+
 ## [2.0.1] - 2025-06-05
 
 ### Added
