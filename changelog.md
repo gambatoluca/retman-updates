@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.0.1] - 2025-06-05
+
+### Added
+- New interactive changelog window: clicking the version label opens a popup displaying the latest changes pulled directly from GitHub.
+
+### Fixed
+- Ensured internal versioning is centralized in code to avoid missing version info in update checks and GUI display.
+
+---
+
 ## [2.0.0] - 2025-06-05
 
 ### Initial Release
@@ -31,5 +41,3 @@ This version introduces the core functionalities of **RetMan**, the return manag
 - **Auto-Updater**
   - Automatic check for new versions on startup.
   - If available, downloads and installs update with progress bar and restart.
-
-
