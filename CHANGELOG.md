@@ -13,6 +13,8 @@
 
 ### Added
 - Automatic release of locks on application exit via `closeEvent()`, ensuring consistent database state even if the app is closed abruptly.
+- Refactored `retqr.py` as a standalone executable (`retqr.exe`) compiled with PyInstaller to bypass Nuitka PDF rendering limitations.
+- GUI integration updated: `retqr.exe` is now called via `subprocess` from within the main application.
 
 ---
 
