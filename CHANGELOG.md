@@ -1,19 +1,36 @@
-# Changelog
+## [2.0.4] - 2025-06-12
+
+### Added
+- Support for dynamic database connection configuration via external JSON file `db_con.json`, with key `connection_string`.
+- Utility function `_load_config()` in `db.py` to read e validare il file di configurazione prima di aprire la connessione.
+- Sample template per `db_con.json` incluso nel progetto.
+
+### Changed
+- Refactored `db.py` to rimuovere la stringa hard-coded e caricare la `connection_string` da `db_con.json`, con gestione dell’errore in caso di chiave mancante.  
+- Aggiornato `get_data_conn()` per restituire la connessione corretta e centralizzare l’uso della configurazione esterna.  
+- Modificati i moduli che accedono al database (`wh_dropdowns.py`, `wh_table.py`, `admin_panel.py`, `login.py`, ecc.) per utilizzare sempre `form.conn` (connessione utente) anziché importare direttamente `sqlitecloud.connect` o chiamare `get_data_conn()` internamente.  
+- Rimosso ogni import diretto di `get_data_conn()` in favore di passaggio della connessione dall’app principale, garantendo coerenza e controllo dei permessi.
+
+### Fixed
+- Eliminati casi di doppia apertura/chiusura di connessione involontaria, spostando la responsabilità di gestione al contesto di `WHForm`.  
+- Risolti eventuali crash in fase di login quando il file `db_con.json` fosse mancante o malformato.
+
+---
 
 ## [2.0.3] - 2025-06-11
 
 ### Fixed
-- Resolved `Lock check failed: no such table: locks` error by restoring correct locking logic based on the `return_status` table (fields: `locked_by`, `locked_at`, `lock_log`).
+- Resolved `Lock check failed: no such table: locks` error by restoring correct locking logic based on the `return_status` table (fields: `locked_by`, `locked_at`, `lock_log`).  
 - Prevented uninitialized connection usage in lock functions by adding safety checks and proper initialization.
 
 ### Changed
-- Refactored `release_user_locks()` to correctly integrate with the existing return-level lock system, removing the unintended dependency on a non-existent `locks` table.
-- Ensured `form.conn` is properly initialized upon user login for use in locking and unlocking routines.
+- Refactored `release_user_locks()` to correctly integrate with the existing return-level lock system, removing the unintended dependency on a non-existent `locks` table.  
+- Ensured `form.conn` is properly initialized upon user login for use in locking and unlocking routines.  
 - Improved error handling and logging in `check_and_apply_lock()` to reflect lock state failures and permission conditions more clearly.
 
 ### Added
-- Automatic release of locks on application exit via `closeEvent()`, ensuring consistent database state even if the app is closed abruptly.
-- Refactored `retqr.py` as a standalone executable (`retqr.exe`) compiled with PyInstaller to bypass Nuitka PDF rendering limitations.
+- Automatic release of locks on application exit via `closeEvent()`, ensuring consistent database state even if the app is closed abruptly.  
+- Refactored `retqr.py` as a standalone executable (`retqr.exe`) compiled with PyInstaller to bypass Nuitka PDF rendering limitations.  
 - GUI integration updated: `retqr.exe` is now called via `subprocess` from within the main application.
 
 ---
@@ -21,7 +38,7 @@
 ## [2.0.2] - 2025-06-05
 
 ### Fixed
-- Resolved issues preventing the display of return logs in the executable version.
+- Resolved issues preventing the display of return logs in the executable version.  
 - Corrected inconsistent data retrieval from SQLiteCloud between `.py` and `.exe` versions.
 
 ### Changed
