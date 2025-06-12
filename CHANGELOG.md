@@ -2,20 +2,35 @@
 
 ### Added
 - Support for dynamic database connection configuration via external JSON file `db_con.json`, with key `connection_string`.
-- Utility function `_load_config()` in `db.py` to read e validare il file di configurazione prima di aprire la connessione.
-- Sample template per `db_con.json` incluso nel progetto.
+- Utility function `_load_config()` in `db.py` to read and validate the configuration file before opening the connection.
+- Sample template for `db_con.json` included in the project.
+- New `db_apikey` column in the `users` table to store each user’s API key (SQL: `ALTER TABLE users ADD COLUMN db_apikey TEXT;`).
+- Automatic generation and regeneration of user API keys in the Admin Panel during user create/edit/delete operations.
+- Read‐only connection string loaded from `db_con.json` in `db.py`.
 
 ### Changed
-- Refactored `db.py` to rimuovere la stringa hard-coded e caricare la `connection_string` da `db_con.json`, con gestione dell’errore in caso di chiave mancante.  
-- Aggiornato `get_data_conn()` per restituire la connessione corretta e centralizzare l’uso della configurazione esterna.  
-- Modificati i moduli che accedono al database (`wh_dropdowns.py`, `wh_table.py`, `admin_panel.py`, `login.py`, ecc.) per utilizzare sempre `form.conn` (connessione utente) anziché importare direttamente `sqlitecloud.connect` o chiamare `get_data_conn()` internamente.  
-- Rimosso ogni import diretto di `get_data_conn()` in favore di passaggio della connessione dall’app principale, garantendo coerenza e controllo dei permessi.
+- Refactored `db.py` to remove the hard-coded connection string and load `connection_string` from `db_con.json`, with error handling for a missing key.
+- Updated `get_data_conn()` to return the correct connection (read-only or user-key) and centralize external configuration usage.
+- Modified all database-accessing modules (`wh_dropdowns.py`, `wh_table.py`, `admin_panel.py`, `login.py`, etc.) to always use `form.conn` (user connection) instead of directly importing `sqlitecloud.connect` or calling `get_data_conn()` internally.
+- Removed direct imports of `get_data_conn()` in favor of passing the connection from the main app, ensuring consistency and permission control.
+- **login.py**:
+  - Performs login with read-only connection, retrieves `db_apikey`, closes the read-only connection, and opens the user-key connection.
+  - Fixed `AttributeError` by replacing `Qt.SmoothTransformation` with `Qt.TransformationMode.SmoothTransformation` and `Qt.AlignCenter` with `Qt.AlignmentFlag.AlignCenter`.
+- **wh_dropdowns.py** & **wh_table.py**:
+  - Switched to using `form.conn` (user-key connection) for dropdowns and table loading.
+  - Restored definition of `where_clauses` to avoid “not defined” errors.
+- **wh_logic.py**:
+  - Safe-read of `returns.log` inside a `try/except` to handle prohibited access.
+  - Centralized connection handling without closing/reopening mid-flow.
 
 ### Fixed
-- Eliminati casi di doppia apertura/chiusura di connessione involontaria, spostando la responsabilità di gestione al contesto di `WHForm`.  
-- Risolti eventuali crash in fase di login quando il file `db_con.json` fosse mancante o malformato.
+- Eliminated cases of unintended double connection open/close by moving management to the context of `WHForm`.
+- Resolved potential login crashes when `db_con.json` was missing or malformed.
+- Resolved “`where_clauses` is not defined” error in `wh_table.py`.
+- Eliminated “access to … is prohibited” permission errors by using the user’s `db_apikey` connection.
 
 ---
+
 
 ## [2.0.3] - 2025-06-11
 
