@@ -1,3 +1,17 @@
+## [2.0.5] – 2025-06-16
+
+### Changed
+- **Renamed buttons in the main WH form interface**:
+  - The `"SAVE"` button is now labeled `"CREATE"`.
+  - The `"MODIFY"` button is now labeled `"SAVE"`.
+- **Removed the `"CLOSE"` button** from the main UI controls section to reduce interface clutter and avoid confusion with window close functionality.
+- **Updated admin context menu logic**:
+  - When right-clicking on a return and selecting `"Hide"` or `"Delete"`, the `archive_status` field is now correctly updated instead of the (no longer existing) `status` column.
+- **Refined logging behavior**:
+  - Upon hiding, deleting, or archiving a return, a success message (e.g. `✔ Return 12345 archived as HID`) is now shown in the log box to confirm the administrative action.
+
+---
+
 ## [2.0.4] – 2025-06-16
 
 ### Added
