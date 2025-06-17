@@ -1,3 +1,19 @@
+## [2.0.6] – 2025-06-17
+
+### Fixed
+- **Refresh crash handling**:
+  - Addressed intermittent `[Load Table Error]` messages caused by socket failures during table refresh.
+  - `load_returns_table()` now includes automatic reconnection logic using the current user’s API key if a `sqlitecloud` or socket-related error is encountered.
+  - Added recovery logging to show reconnect attempts and fatal fallback if retry fails.
+
+### Changed
+- **Extended numeric input limits**:
+  - Both **Customer ID** and **Invoice Number** fields in the `WHForm` and `RetQRForm` can now accept up to 20 digits instead of being limited to 9.
+  - `QIntValidator` was replaced with `QRegularExpressionValidator(r"\d{1,20}")` to support long customer and invoice numbers without truncation or validation failure.
+  - Applied consistently in both the main form (`wh_form.py`) and the external QR generator (`retqr.py`).
+
+---
+
 ## [2.0.5] – 2025-06-16
 
 ### Changed
