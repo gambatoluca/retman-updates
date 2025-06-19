@@ -1,3 +1,24 @@
+## [2.0.7] – 2025-06-18
+
+### Fixed
+- **Persistent connection failure workaround**  
+  - Solved recurring `An error occurred while reading command length from the socket` by redesigning the database access model to **open and close a new connection per operation**.
+  - `load_returns_table()` now creates a **temporary connection and cursor** for every call, eliminating reliance on persistent socket-based sessions.
+  - Removed all instances of `Skipped refresh (inactive window)` logic by making auto-refresh run unconditionally.
+
+### Added
+- **Heartbeat mechanism for session preservation**  
+  - A new periodic task updates the `users.heartbeat` field every 4 minutes for the logged-in user (`fullname`), keeping the database session alive and reducing idle timeouts.
+  - The process also performs a `SELECT` before the update to simulate continuous usage.
+  - A `[HEARTBEAT]` log message is added to the interface for each cycle.
+
+### Changed
+- **Auto-refresh frequency lowered to 5 minutes**  
+  - Reduced interval from 10 minutes (600,000 ms) to 5 minutes (300,000 ms) to avoid disconnection on idle.
+  - Auto-refresh now works regardless of window focus or activity status.
+
+---
+
 ## [2.0.6] – 2025-06-17
 
 ### Fixed
