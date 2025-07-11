@@ -1,3 +1,19 @@
+## [2.0.8] – 2025-07-11
+
+### Fixed
+- **Status column mapping in WH table**
+  - The `Status` column in the `WHForm` main table now correctly reflects the value from `return_status.status`.
+  - Resolved an indexing bug where `user_modifier` was mistakenly shown in place of the actual return status.
+  - Updated `load_returns_table()` in `wh_table.py` to explicitly inject `status` at the correct table index.
+
+### Removed
+- **Heartbeat mechanism**
+  - Completely removed the periodic `heartbeat_tick()` logic introduced in version 2.0.7.
+  - This feature caused `[HEARTBEAT ERROR]` logs in environments where the `users.fullname` field did not exist.
+  - Deleted `heartbeat_timer` initialization and `heartbeat_tick()` method from `wh_form.py`.
+
+---
+
 ## [2.0.7] – 2025-06-18
 
 ### Fixed
