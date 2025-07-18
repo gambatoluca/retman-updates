@@ -17,6 +17,11 @@
   - The SKU search field in the advanced SEARCH popup now offers autocompletion and live validation.
   - Shows product name in green if found, or “Not found” in red, improving the accuracy of filtered queries.
 
+- **Filter for returns with missing customer data**
+  - Advanced **SEARCH** popup now includes a checkbox **“⚠ Only returns with missing Customer / Invoice”**.
+  - When enabled, the results list only returns where either `Customer ID` or `Invoice` is empty.
+  - Corresponding logic added to `wh_table.py` to build the SQL `WHERE` clause.
+
 ### Changed
 - **Read-only products section**
   - QTY and product name fields in the products section are no longer directly editable; all insertions and modifications are handled via the popup for data consistency.
@@ -25,6 +30,10 @@
 - **Popup UX improvements**
   - In the product entry popup, the **"Add"** button now immediately adds a product to the form (and updates the visible list), clearing the fields for the next entry, while the **"Close"** button simply closes the dialog.
   - Product selection workflow ensures the operator always sees exactly what has been added before finalizing a return.
+
+- **Visual marking of incomplete returns**
+  - `wh_table.py` now highlights rows with missing `Customer ID` **or** `Invoice` in light-red (`#ffbbbb`) and adds a tooltip “Missing Customer ID or Invoice”.
+  - These returns remain visible in other filter modes and are easily identifiable.
 
 ### Fixed
 - **Legacy `qty_sku` field usage**
@@ -37,8 +46,6 @@
 ### Compatibility
 - These changes are fully compatible with existing saved returns; historical returns display unavailable SKUs as "Unknown product (SKU)" but can still be reviewed, edited (if valid SKU chosen), or saved.
 
-
----
 
 ## [2.0.8] – 2025-07-11
 
