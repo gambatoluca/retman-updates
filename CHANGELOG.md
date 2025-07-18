@@ -1,3 +1,45 @@
+## [2.0.9] – 2025-07-17
+
+### Added
+- **New product entry workflow in WHForm**
+  - The "Products" section in `WHForm` now features a dedicated **Add Products** button that opens a popup for rapid barcode/manual entry.
+  - The popup supports scanning EAN or entering SKU, with autocompletion and live validation against the products table (SKU/EAN → product name).
+  - Users can add multiple products in a row without closing the popup, and each addition updates the products list in real-time in the main form.
+  - All product edits are performed via the popup (pre-filled for edits); direct modification of products in the grid is disabled.
+  - Added support for deleting or editing individual products via new icons (✏️/🗑️) in each row, visible for all 12 product slots.
+  - The products section now shows **QTY** and **Product Name** (in bold), instead of SKU, for better operator clarity.
+
+- **Robust SKU/EAN validation**
+  - Prevents the insertion of products not found in the `products` table (either by SKU or EAN).
+  - When loading historical returns, if a product SKU is missing from the current database, the app displays `"Unknown product (SKU)"` in the product name column.
+
+- **Product search validation in SEARCH dialog**
+  - The SKU search field in the advanced SEARCH popup now offers autocompletion and live validation.
+  - Shows product name in green if found, or “Not found” in red, improving the accuracy of filtered queries.
+
+### Changed
+- **Read-only products section**
+  - QTY and product name fields in the products section are no longer directly editable; all insertions and modifications are handled via the popup for data consistency.
+  - Product edit/delete icons are disabled in "VIEW" mode, preventing accidental changes when reviewing past returns.
+
+- **Popup UX improvements**
+  - In the product entry popup, the **"Add"** button now immediately adds a product to the form (and updates the visible list), clearing the fields for the next entry, while the **"Close"** button simply closes the dialog.
+  - Product selection workflow ensures the operator always sees exactly what has been added before finalizing a return.
+
+### Fixed
+- **Legacy `qty_sku` field usage**
+  - Removed all references to the obsolete `qty_sku` logic in favor of the new product_rows structure, eliminating `AttributeError` and related errors in loading, editing, or saving returns.
+
+- **Visual and interaction bugs in product grid**
+  - All 12 product slots now consistently display both the edit and delete icons, regardless of grid position.
+  - UI coloring for "Unknown product" or "Not found" SKUs improved for operator clarity.
+
+### Compatibility
+- These changes are fully compatible with existing saved returns; historical returns display unavailable SKUs as "Unknown product (SKU)" but can still be reviewed, edited (if valid SKU chosen), or saved.
+
+
+---
+
 ## [2.0.8] – 2025-07-11
 
 ### Fixed
