@@ -1,4 +1,4 @@
-## [2.0.9] – 2025-07-17
+## [2.1.0] – 2025-07-17
 
 ### Added
 - **New product entry workflow in WHForm**
