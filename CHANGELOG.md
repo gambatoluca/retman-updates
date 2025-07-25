@@ -1,3 +1,37 @@
+## [2.2.1] – 2025-07-25
+
+### Added
+- **“View” product button**  
+  – A permanent 🔍 icon appears in every product slot (qty+name+✏️+🗑️+🔍), even if empty.  
+  – Opens a new **ProductViewDialog** showing SKU, product name and EAN list, all text selectable and copy-able.  
+- **Copy-SKU interactions**  
+  – Right-click or double-click on any product name label to copy its SKU to clipboard.  
+  – A tooltip on each label (“Right-click or double-click to copy SKU”) guides operators.
+  - **Automatic update check (hourly)**  
+  – A background timer checks once per hour **only during weekdays (Mon–Fri)** and **only between 07:00 and 18:00**.  
+  – If a new version is available, a popup informs the user to close and reopen the app to update.
+- **Centralized version constant**  
+  – Introduced a new `version.py` module that defines `CURRENT_VERSION`, now used by both `login.py` and `update_utils.py`.
+
+
+### Changed
+- **Products grid layout**  
+  – Expanded each product slot to 5 columns for qty, name, ✏️, 🗑️ and 🔍.  
+  – Uniform column-stretch ensures no empty gaps; “Add Products” spans full width of the products section.  
+- **Initialization order**  
+  – `product_view_btns` is populated in `wh_ui_sections.py` builder, then only enabled/disabled in `update_products_section()`, avoiding repeated creation or double-binding of click handlers.
+  - **Update check moved to utility module**  
+  – The function `check_for_update_gui()` was extracted from `login.py` and now resides in a dedicated `update_utils.py` for modularity and reuse.
+
+### Fixed
+- **Double-popup issue**  
+  – Removed redundant click-handler binding in `WHForm.__init__`, so each 🔍 opens the dialog exactly once.  
+- **IndexError crash**  
+  – Ensured `self.product_view_btns` always contains 12 buttons by building them in the UI constructor, preventing out-of-range accesses.  
+- **Empty-space gap**  
+  – Corrected grid indexing to use `(i % 4) * 5 + 0–4` for widget placements, eliminating misaligned or hidden 🔍 buttons.
+
+
 ## [2.1.0] – 2025-07-17
 
 ### Added
