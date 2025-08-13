@@ -1,3 +1,30 @@
+## [2.2.2] – 2025-08-13
+
+### Added
+- **Full-name tooltip in Owner column**  
+  – Hovering over the `Owner` column in the returns table now displays the full name(s) corresponding to the initials shown in the cell.  
+  – For returns with both creator and modifier, both names are shown separated by `|`.  
+  – Tooltip also merges with any existing row warnings (e.g., “Missing Customer ID or Invoice”).
+- **VIEW-mode safeguards for Products**  
+  – In “VIEW” mode, clicking ✏️ or 🗑️ in the products section no longer triggers any edit or delete actions.  
+  – This safeguard is enforced both via button disabling and in the event handlers to prevent accidental modifications.
+- **Delete confirmation dialog**  
+  – In “EDIT” mode, clicking 🗑️ now shows a confirmation popup before removing a product from the list.
+
+### Changed
+- **Product name font style**  
+  – Product names in the products section are now displayed in a normal-weight font instead of bold, for improved readability and consistency.  
+  – QTY labels remain bold to retain quick quantity recognition.
+- **Internal handler structure for Products**  
+  – Refactored `edit_product` and `delete_product` methods in `WHForm` to include mode checks and popup logic without altering existing product popup workflows.
+
+### Fixed
+- **Accidental product changes in VIEW mode**  
+  – Previously, if the product edit/delete buttons were manually re-enabled, clicking them could still modify the return. Now the code enforces no-op behavior in VIEW mode regardless of button state.
+- **Consistent product slot rendering**  
+  – Ensured that font style changes for product names apply to all 12 slots and persist through return loading, editing, and saving.
+
+
 ## [2.2.1] – 2025-07-25
 
 ### Added
