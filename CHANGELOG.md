@@ -1,3 +1,39 @@
+## [2.3.0] – 2025-08-19
+
+### Added
+- **Useless facts with timeout**  
+  – The background request for the “useless fact” at startup now has a strict timeout of 2 seconds for both connection and read, ensuring the UI loads instantly even if the external API is slow or unreachable.  
+  – Failure cases now log a clear message without blocking the interface.
+- **Database Backup system**  
+  – Added remote-to-file backup functionality for the SQLiteCloud database, saving `.db` files locally.  
+  – Suggested filename is automatically pre-filled with current date (e.g., `2025-08-14_RetMan.db`).  
+  – Added progress bar during backup operations for better feedback.  
+  – Introduced **Backup Explorer** allowing inspection of backup files without restoring them.  
+  – In Backup Explorer, added the ability to view linked comments, products, and logs for each return.
+
+### Changed
+- **KPI module cleanup**  
+  – Removed unused imports, redundant variables, and outdated comments for better maintainability.  
+  – Streamlined chart rendering logic to avoid unnecessary recomputation when switching tabs.  
+  – Unified SQL queries to reduce duplicate database calls for overlapping metrics.
+- **UI code consistency**  
+  – Reorganized product section widget initialization in `WHForm` to ensure consistent button creation before event binding.  
+  – Minor style adjustments for better alignment of product grid elements.
+- **Table default scroll position**  
+  – Returns table now automatically scrolls to the last record when loaded, instead of starting from the first row.
+- **Temporary removal of Restore button**  
+  – The database restore button in the Admin Panel backup tab has been temporarily removed (feature flag disabled) while keeping the restore logic intact for future development.
+- **QR scan editability**  
+  – When a QR code is loaded in **WHForm**, the **Status** dropdown remains locked, while **Return Reason**, **OEM**, and **Open/Unopen** are now enabled and can be edited.
+
+### Fixed
+- **Startup white-screen issue**  
+  – Resolved a bug where `WHForm` could open with a blank window if certain UI components were accessed before `build_ui()` completed execution.  
+  – Initialization order is now enforced so that dropdowns, tables, and buttons are fully built before data loading begins.
+- **Potential product-section crashes**  
+  – Fixed cases where product edit/delete buttons could be connected before the `product_*_btns` lists were populated, leading to `IndexError` on click.
+
+
 ## [2.2.2] – 2025-08-13
 
 ### Added
