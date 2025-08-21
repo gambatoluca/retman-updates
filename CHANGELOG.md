@@ -1,15 +1,17 @@
-## [2.3.0] – 2025-08-19
+## [2.3.0] – 2025-08-21
 
 ### Added
-- **Useless facts with timeout**  
+- **Fun facts with timeout**  
   – The background request for the “useless fact” at startup now has a strict timeout of 2 seconds for both connection and read, ensuring the UI loads instantly even if the external API is slow or unreachable.  
   – Failure cases now log a clear message without blocking the interface.
 - **Database Backup system**  
   – Added remote-to-file backup functionality for the SQLiteCloud database, saving `.db` files locally.  
   – Suggested filename is automatically pre-filled with current date (e.g., `2025-08-14_RetMan.db`).  
-  – Added progress bar during backup operations for better feedback.  
   – Introduced **Backup Explorer** allowing inspection of backup files without restoring them.  
   – In Backup Explorer, added the ability to view linked comments, products, and logs for each return.
+- **Product Add dialog UX improvements**  
+  – In the “Add Products” popup, the **Scan/Barcode field** is now the first input with initial focus, followed automatically by the **Quantity field**.  
+  – Pressing **Enter** in the popup now triggers the product addition, equivalent to clicking the **ADD** button.
 
 ### Changed
 - **KPI module cleanup**  
@@ -25,6 +27,11 @@
   – The database restore button in the Admin Panel backup tab has been temporarily removed (feature flag disabled) while keeping the restore logic intact for future development.
 - **QR scan editability**  
   – When a QR code is loaded in **WHForm**, the **Status** dropdown remains locked, while **Return Reason**, **OEM**, and **Open/Unopen** are now enabled and can be edited.
+- **QR reset behavior**  
+  – The QR input field is now automatically cleared after pressing **RESET** or after creating a new return, avoiding manual cleanup.
+- **Owner column display**  
+  – The **Owner** column in the returns table now shows only the **initials** of the creator and last modifier.  
+  – Hovering over the field shows a tooltip with the full names of both users for clarity.
 
 ### Fixed
 - **Startup white-screen issue**  
@@ -32,6 +39,13 @@
   – Initialization order is now enforced so that dropdowns, tables, and buttons are fully built before data loading begins.
 - **Potential product-section crashes**  
   – Fixed cases where product edit/delete buttons could be connected before the `product_*_btns` lists were populated, leading to `IndexError` on click.
+- **Lock release after save**  
+  – When a return is modified and saved, its **lock** is now correctly released and the form switches back to **VIEW** mode.
+- **Customer/Invoice zero-padding**  
+  – Fixed a formatting issue where leading zeros in Customer ID or Invoice were dropped (e.g., `0002345` shown as `2345`). They now retain full formatting as entered.
+- **Row coloring in returns table**  
+  – Status-based row coloring (yellow for **NEW!**, green for **CLOSED**) has been restored. Missing Customer/Invoice rows are also highlighted in light red.
+
 
 
 ## [2.2.2] – 2025-08-13
