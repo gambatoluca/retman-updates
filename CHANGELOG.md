@@ -1,3 +1,67 @@
+## [2.3.1] – 2025-09-05
+
+### Added
+- **Product name resolver (DB-backed)**  
+  – Introduced a centralized product lookup with module-level cache to resolve product names by SKU across the app.  
+  – Normalizes SKUs (`strip().upper()`) before querying, removing case/spacing mismatches and reducing duplicate DB hits.
+- **Admin Panel — Product Import live preview**  
+  – Added a preview table that shows sample rows as they are imported from Excel.  
+  – Log box now streams created/updated/skipped entries live.  
+  – Progress bar is fully functional during the import of large files (60k+ rows).  
+- **Admin Panel — Backup progress**  
+  – Backup process now runs in a worker thread with a responsive **progress dialog**.  
+  – User can cancel the operation mid-way.  
+  – Success and error messages are clearer.
+- **KPI Module — Date range controls & quick presets**  
+  – Added date range selectors and quick presets (e.g., last 7/30/90 days, YTD) for **Overview** and **User KPIs** tabs.  
+  – Charts and tables are refreshed only with data within the selected range.  
+  – Switching range or applying presets now clears the old data traces before rendering new ones, fixing label overlap issues.  
+- **KPI Module — Enhanced Customer/Product popups**  
+  – Customer details popup now shows **Return ID**, **Invoice Number** and related **products per invoice**, all with copy-to-clipboard support.  
+  – Product details popup similarly supports copying values and ensures invoice numbers are displayed as integers.  
+- **Duplicate Invoice check**  
+  – When creating a return, the system now checks if the same **Invoice** already exists in the database.  
+  – If matches are found, a popup warns the user, listing the existing Return IDs (and related info), and asks whether to proceed anyway.  
+- **Search dialog — Admin-only HID/DEL controls**  
+  – Added two admin-only checkboxes: **Include HID** and **Include DEL**.  
+  – Added **VIEW** buttons next to each checkbox to quickly show a list containing **only** HID or **only** DEL returns.
+
+### Changed
+- **“Add Products” popup — Product Code field**  
+  – The **Product Code** (SKU) field is now **read-only**. It’s populated via scan/autofill and can’t be edited manually, preventing accidental SKU corruption.  
+- **Consistent SKU normalization**  
+  – Added a small helper to normalize SKUs and applied it wherever products are rendered or viewed, ensuring consistent lookups and UI text.  
+- **Minor UX polish in product area**  
+  – When product names are refreshed from the DB, the cleaned name is kept in memory so subsequent popups and views display exactly the same value.  
+- **Admin Panel — Optimized Product Import**  
+  – Import now uses **batched transactions** and `ON CONFLICT(sku) DO UPDATE`, dramatically reducing the time for large imports.  
+  – Merging of EANs is handled efficiently in Python before commit.  
+  – Default batch size set to 1000 rows (configurable in code).  
+- **KPI Module — Filtering logic**  
+  – All KPIs exclude returns with archive status `HID` or `DEL`.  
+  – Top customers table now hides entries with customer_code `0` or empty.
+- **Repository & Table — HID/DEL handling**  
+  – Repository search now dynamically includes or excludes `HID`/`DEL` based on the new admin filters, and supports an `only_arch` mode used by the **VIEW** buttons.  
+  – Table highlights included `HID` and `DEL` rows with distinct font colors (HID = blue, DEL = red) when filters are active.
+
+### Fixed
+- **“Unknown product (SKU)” after the first item**  
+  – Resolved an issue where, in **VIEW**/**MODIFY** mode, only the first product showed the correct name while subsequent items appeared as “Unknown product (XXX)”.  
+  – Each slot now resolves its name independently using the normalized SKU and the product cache, with a single, consistent fallback only when the SKU truly isn’t found.  
+- **View Product dialog name mismatch**  
+  – The **Product Details** popup now always shows the correct product name (synced with the list) and retrieves the EANs reliably from the database.  
+- **Stability on edge data**  
+  – Hardened product rendering against partial rows and `None` values to avoid intermittent errors during UI refresh.  
+- **Admin Panel — Progress bars not updating**  
+  – Fixed an issue where progress bars for Backup and Product Import were not updating because the operations were blocking the UI thread.  
+  – Now both tasks run in dedicated workers, keeping the interface responsive.  
+- **KPI Module — Visual refresh issues**  
+  – Old labels and chart data no longer persist when changing date ranges or quick presets.  
+  – Popups in **Customers & Products** tab now display integers consistently for invoice numbers.  
+- **Counts error with some drivers**  
+  – Fixed `no such column: status` by joining the `return_status` table in counters and fully qualifying columns; counters also consistently exclude `HID`/`DEL` unless explicitly included by admin filters.
+
+
 ## [2.3.0] – 2025-08-21
 
 ### Added
