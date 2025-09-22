@@ -1,3 +1,44 @@
+## [2.3.2] – 2025-09-22
+
+### Added
+- **Updater window icon**: All updater windows and the taskbar now display the custom RetManUpdaterIcon.ico icon.
+- **Fun Fact reload on logo double-click**: Double-clicking the logo (top-right corner) fetches and appends a new Fun Fact directly into the log box.
+- **RetQR – Apply to all pages**: New "Apply QR to all pages" checkbox to stamp the QR on every page of the PDF.
+- **RetQR – Non-blocking operations**: Preview rendering and saving now run on worker threads with a QProgressDialog.
+- **RetQR – Optional OpenGL viewport**: If available, preview uses QOpenGLWidget for smoother pan/zoom.
+- **RetQR – Auto Save shortcut**: Ctrl+Shift+A toggles Auto Save.
+- **RetQR – HiDPI policy**: PassThrough rounding policy for crisp rendering on high-DPI displays.
+- **Search dialog — User filters**: Added two dropdowns: Created by and Modified/Closed by.
+  - Dropdowns show users.username while filtering by initials stored in returns.user_creator and returns.user_modifier.
+  - User list is loaded from the users table and ordered by username.
+
+### Changed
+- **Updater destination folder**: Update packages are now always extracted into the RetManV2 folder (created automatically if missing).
+  - Before extraction, the updater removes all contents of RetManV2 except:
+    - RetQR/ (kept if not present in the update package).
+    - All versioned updaters RetManUpdaterV*.exe (never deleted during update).
+- **Updater self-update strategy**: Each new updater version is saved as RetManUpdaterV{N}.exe; only the two most recent versions are kept.
+- **Shortcut creation**: The updater always recreates RetMan.lnk pointing to RetMan.exe inside RetManV2.
+- **Progress bar**: Thicker progress bar with visible percentage text.
+- **RetQR – Window startup**: The window now opens always maximized with post-show enforcement and timed retries (more reliable even from the executable).
+- **RetQR – Lighter preview**: Preview DPI set to 150 to reduce memory usage.
+- **RetQR – Preview engine**: Prefer PyMuPDF (fitz); pdf2image is used only as a lazy-import fallback inside the function.
+- **RetQR – Auto Save & filename**: Auto Save defaults ON (persisted via QSettings); save dialog pre-fills filename from invoice/customer when used.
+- **RetQR – Cleanup**: Centralized scene cleanup and temporary directory removal on app exit.
+- **Search dialog — Admin controls layout**: HID/DEL admin controls moved below the new user filters and set to span both columns to keep the grid tidy.
+
+### Fixed
+- **Rename exclusions**: The rename step excludes RetManUpdater.exe, any RetManUpdaterV*.exe, the RetQR folder, and other critical files/folders.
+- **Extraction cleanup**: Fixed cases where leftover files in RetManV2 could persist between updates; irrelevant files are now reliably removed.
+- **RetQR – Crash after "NEW QR" → "Load PDF"**: Resolved crash caused by operating on a deleted QGraphicsPixmapItem (reference cleanup + sip.isdeleted guards).
+- **RetQR – Preview/Save errors**: Corrected QR path checks (no more "Missing PDF or QR code image" / "No PDF available to preview" in normal flows).
+- **RetQR – Script startup**: Fixed NameError: win is not defined in main (proper window creation and maximize sequence).
+- **Search dialog — Overlapping controls**: Resolved overlap between the new Created/Modified dropdowns and the HID/DEL admin controls.
+
+### Packaging
+- **RetQR – Leaner build & faster start**: Recommended --onedir build: prefer PyMuPDF and exclude pdf2image/Poppler plus unused Qt modules (QtWebEngine*, QtQml, QtQuick, QtDesigner, QtTest).
+- **Removed top-level import of pdf2image** (now only a fallback inside the function) to avoid startup crashes when excluded from the build.
+
 ## [2.3.1] – 2025-09-05
 
 ### Added
