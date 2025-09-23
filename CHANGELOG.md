@@ -11,6 +11,9 @@
 - **Search dialog — User filters**: Added two dropdowns: Created by and Modified/Closed by.
   - Dropdowns show users.username while filtering by initials stored in returns.user_creator and returns.user_modifier.
   - User list is loaded from the users table and ordered by username.
+- **Warehouse — Selling price per product**: Product dialog now includes a mandatory **Selling price** field.
+  - Accepts inputs like `12`, `12.3`, `12,3`, `12.345`; automatically converts comma to dot and rounds **half-up** to **two decimals**.
+  - Prices are stored normalized as `123.45` and persisted alongside qty/sku for each product.
 
 ### Changed
 - **Updater destination folder**: Update packages are now always extracted into the RetManV2 folder (created automatically if missing).
@@ -26,6 +29,7 @@
 - **RetQR – Auto Save & filename**: Auto Save defaults ON (persisted via QSettings); save dialog pre-fills filename from invoice/customer when used.
 - **RetQR – Cleanup**: Centralized scene cleanup and temporary directory removal on app exit.
 - **Search dialog — Admin controls layout**: HID/DEL admin controls moved below the new user filters and set to span both columns to keep the grid tidy.
+- **Warehouse — Save/Modify validation**: Saving a return now requires a valid selling price (two decimals) for each product; input is auto-normalized.
 
 ### Fixed
 - **Rename exclusions**: The rename step excludes RetManUpdater.exe, any RetManUpdaterV*.exe, the RetQR folder, and other critical files/folders.
@@ -34,10 +38,18 @@
 - **RetQR – Preview/Save errors**: Corrected QR path checks (no more "Missing PDF or QR code image" / "No PDF available to preview" in normal flows).
 - **RetQR – Script startup**: Fixed NameError: win is not defined in main (proper window creation and maximize sequence).
 - **Search dialog — Overlapping controls**: Resolved overlap between the new Created/Modified dropdowns and the HID/DEL admin controls.
+- **Warehouse — Product dialog tab-order warning**: Removed stray setTabOrder calls that caused “QWidget::setTabOrder: 'first' and 'second' must be in the same window”.
 
 ### Packaging
 - **RetQR – Leaner build & faster start**: Recommended --onedir build: prefer PyMuPDF and exclude pdf2image/Poppler plus unused Qt modules (QtWebEngine*, QtQml, QtQuick, QtDesigner, QtTest).
 - **Removed top-level import of pdf2image** (now only a fallback inside the function) to avoid startup crashes when excluded from the build.
+
+### Database
+- **return_products.selling_price (TEXT)**: New column storing per-product selling prices as a semicolon-separated list aligned with qtys/skus.
+  - Migration:
+    - `ALTER TABLE return_products ADD COLUMN selling_price TEXT;`
+    - `UPDATE return_products SET selling_price = '' WHERE selling_price IS NULL;`
+
 
 ## [2.3.1] – 2025-09-05
 
